@@ -562,7 +562,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                              Déconnexion
+                              Enregistrement
                             </NavLink>
                           </li>
                         </ul>
