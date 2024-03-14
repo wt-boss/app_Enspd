@@ -11,7 +11,7 @@ const editRessource = lazy(() => import('../pages/EditElements/Ressource'));
 const editUser = lazy(() => import('../pages/EditElements/user'));
 const Settings = lazy(() => import('../pages/Settings'));
 const user = lazy(() => import('../pages/AddElements/user'));
-const Ressource = lazy(() => import('../pages/AddElements/Ressource'));
+const Ressource = lazy(() => import('../pages/AddElements/Sanction'));
 const TableRessources= lazy(() => import('../pages/ListingRessources'));
 
 const coreRoutes = [

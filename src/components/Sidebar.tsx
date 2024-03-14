@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import Logo from '../images/logo/logo-icon.svg';
+import Logo from '../images/logo/logo.jpg';
 import SidebarLinkGroup from './SidebarLinkGroup';
 
 interface SidebarProps {
@@ -64,12 +64,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-        <div className="mb-2 flex flex-col gap-5.5 sm:flex-row">
-          <div className="w-full sm:w-1/3">
-            <img src={Logo} alt="Logo" />
+        <div className="mb-2 flex flex-col gap-5.5 sm:flex-row items-center">
+          <div className="w-full sm:w-1/3 ">
+            <img src={Logo} alt="Logo" className='block rounded-full w-16 h-16 '/>
           </div>
           <div className="w-full sm:w-1/3">
-            <h1 className=" text-lm font-bold text-bodydark2"> DUVAAL RH</h1>
+            <h1 className=" text-xl font-black text-bodydark2 whitespace-nowrap"> DUVAAL RH</h1>
           </div>
         </div>
       </div>
@@ -171,7 +171,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </NavLink>
                           </li>
 
-                          <li>
+                        {/*   <li>
                             <NavLink
                               to="/"
                               className={({ isActive }) =>
@@ -181,7 +181,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             >
                               # Historque des presences
                             </NavLink>
-                          </li>
+                          </li> */}
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
@@ -423,7 +423,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }`}
                       >
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                        <li>
+                        {/* <li>
                             <NavLink
                               to="/AddElements/user"
                               className={({ isActive }) =>
@@ -433,7 +433,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             >
                               Mise a jour des presences
                             </NavLink>
-                          </li>
+                          </li> */}
                           <li>
                             <NavLink
                               to="/AddElements/user"
