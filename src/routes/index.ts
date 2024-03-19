@@ -1,5 +1,4 @@
 import { lazy } from 'react';
-
 const Listusers = lazy(() => import('../pages/ListingUsers'));
 const ListingdetailRessourceUtilisation= lazy(() => import('../pages/detailRessourceUtilisation'));
 const FormElements = lazy(() => import('../pages/Form/FormElements'));
@@ -12,7 +11,8 @@ const editUser = lazy(() => import('../pages/EditElements/user'));
 const Settings = lazy(() => import('../pages/Settings'));
 const user = lazy(() => import('../pages/AddElements/user'));
 const Ressource = lazy(() => import('../pages/AddElements/Sanction'));
-const TableRessources= lazy(() => import('../pages/ListingRessources'));
+const TableRessources= lazy(() => import('../pages/ListingSanction'));
+const ListingPresence = lazy(() => import('../pages/ListingPresence'));
 
 const coreRoutes = [
   {
@@ -79,6 +79,11 @@ const coreRoutes = [
     path: '/pages/detailRessourceUtilisation',
     title: 'detailRessourceUtilisation',
     component: ListingdetailRessourceUtilisation,
+  },
+  {
+    path: '/ListingPresence',
+    title: 'ListingPresence',
+    component: ListingPresence,
   },
 ];
 
