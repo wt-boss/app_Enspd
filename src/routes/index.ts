@@ -13,6 +13,7 @@ const user = lazy(() => import('../pages/AddElements/user'));
 const Ressource = lazy(() => import('../pages/AddElements/Sanction'));
 const TableRessources= lazy(() => import('../pages/ListingSanction'));
 const ListingPresence = lazy(() => import('../pages/ListingPresence'));
+const ListingConges =lazy(()=>import('../pages/ListingConges'))
 
 const coreRoutes = [
   {
@@ -84,6 +85,12 @@ const coreRoutes = [
     path: '/ListingPresence',
     title: 'ListingPresence',
     component: ListingPresence,
+  },
+
+  {
+    path: '/ListingConges',
+    title: 'ListingConges',
+    component:ListingConges ,
   },
 ];
 
