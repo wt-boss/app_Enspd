@@ -7,6 +7,7 @@ import SignUp from './pages/Authentication/SignUp';
 import Loader from './common/Loader';
 import routes from './routes';
 import Home from './pages/Dashboard/Home';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
 
@@ -27,11 +28,17 @@ function App() {
         containerClassName="overflow-auto"
       />
       <Routes>
-        
         <Route path="/auth/signup" element={<SignUp />} />
         <Route path="/auth/signin" element={<SignIn />} />
         <Route element={<DefaultLayout />}>
-          <Route index element={<Home />} />
+          <Route
+            index
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
           {routes.map((routes, index) => {
             const { path, component: Component } = routes;
             return (
@@ -39,9 +46,11 @@ function App() {
                 key={index}
                 path={path}
                 element={
-                  <Suspense fallback={<Loader />}>
-                    <Component />
-                  </Suspense>
+                  <ProtectedRoute>
+                    <Suspense fallback={<Loader />}>
+                      <Component />
+                    </Suspense>
+                  </ProtectedRoute>
                 }
               />
             );

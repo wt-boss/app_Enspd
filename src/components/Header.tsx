@@ -4,11 +4,41 @@ import DarkModeSwitcher from './DarkModeSwitcher';
 import DropdownMessage from './DropdownMessage';
 import DropdownNotification from './DropdownNotification';
 import DropdownUser from './DropdownUser';
+import { useState } from 'react';
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
+ 
+  async function getUser(){
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/getuser', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      localStorage.setItem('user' , JSON.stringify(data.user))  ;
+      console.log(localStorage.getItem('token'))
+      console.log(localStorage.getItem('user'))
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
+    }
+  }
+
+   getUser() ;
+   const user  = JSON.parse(localStorage.getItem('user')!)
+
+  
+
+
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
       <div className="flex flex-grow items-center justify-end py-4 px-4 shadow-2 md:px-6 2xl:px-11">
@@ -100,20 +130,20 @@ const Header = (props: {
         <div className="flex items-center gap-3 2xsm:gap-7 justify-end">
           <ul className="flex items-center gap-2 2xsm:gap-4 justify-end">
             {/* <!-- Dark Mode Toggler --> */}
-           {/*  <DarkModeSwitcher /> */}
+            {/*  <DarkModeSwitcher /> */}
             {/* <!-- Dark Mode Toggler --> */}
 
             {/* <!-- Notification Menu Area --> */}
-           {/*  <DropdownNotification /> */}
+            {/*  <DropdownNotification /> */}
             {/* <!-- Notification Menu Area --> */}
 
             {/* <!-- Chat Notification Area --> */}
-          {/*   <DropdownMessage /> */}
+            {/*   <DropdownMessage /> */}
             {/* <!-- Chat Notification Area --> */}
           </ul>
 
           {/* <!-- User Area --> */}
-          <DropdownUser />
+          <DropdownUser  />
           {/* <!-- User Area --> */}
         </div>
       </div>

@@ -1,9 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import UserOne from '../images/user/nanche.png';
+import { useNavigate } from 'react-router-dom';
+import UserOne from '../images/user/user.png';
 
 const DropdownUser = () => {
+
+  const user  = JSON.parse(localStorage.getItem('user')!)
+
+  const navigate = useNavigate() ;
+  const logout = (e) => {
+    e.preventDefault() ;
+    localStorage.removeItem('token');
+    navigate("/auth/signin");
+  };
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -45,9 +54,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Nadage Youngwa
+            {user.name && user.name}
           </span>
-          <span className="block text-xs">DRH</span>
+          <span className="block text-xs">{user.function && user.function}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full overflow-hidden flex justify-center items-center">
@@ -135,7 +144,7 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <Link to='/auth/signin' className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <a href='#' onClick={logout} className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
           <svg
             className="fill-current"
             width="22"
@@ -154,7 +163,7 @@ const DropdownUser = () => {
             />
           </svg>
           DECONNEXION
-        </Link>
+        </a>
       </div>
       {/* <!-- Dropdown End --> */}
     </div>

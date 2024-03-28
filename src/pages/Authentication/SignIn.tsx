@@ -1,8 +1,37 @@
-import { Link } from 'react-router-dom';
+import { Link, redirect } from 'react-router-dom';
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.jpg';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const SignIn = () => {
+
+ export default function SignIn ()  {
+  const navigate = useNavigate();
+
+  const [user , setUser] = useState({email:"" , password:""}) ;
+  const authenticateUser = async (event ,email, password) => {
+    event.preventDefault();
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      if (!response.ok) throw new Error('Échec de l\'authentification');
+  
+      const { token } = await response.json();
+      localStorage.setItem('token', token);
+      console.log("ok") ;
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
   return (
     <>
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark h-full">
@@ -152,7 +181,7 @@ const SignIn = () => {
                Se Connecter à DUVAAL RH
               </h2>
 
-              <form action='/'>
+              <form onSubmit={()=>authenticateUser(event ,user.email , user.password)}>
                 <div className="mb-4 md-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email
@@ -160,6 +189,8 @@ const SignIn = () => {
                   <div className="relative">
                     <input
                       type="email"
+                      value={user.email} 
+                      onChange={(e) => setUser( {...user,email:e.target.value})}
                       placeholder="Entrer votre email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -191,6 +222,8 @@ const SignIn = () => {
                   <div className="relative">
                     <input
                       type="password"
+                      value={user.password} 
+                      onChange={(e) => setUser( {...user,password:e.target.value})}
                       placeholder="6+ Characters, 1 Capital letter"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -246,4 +279,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+
