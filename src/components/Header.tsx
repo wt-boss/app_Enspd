@@ -4,13 +4,14 @@ import DarkModeSwitcher from './DarkModeSwitcher';
 import DropdownMessage from './DropdownMessage';
 import DropdownNotification from './DropdownNotification';
 import DropdownUser from './DropdownUser';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
  
+  const [user , setUser] = useState(null) ;
   async function getUser(){
     try {
       const response = await fetch('http://127.0.0.1:8000/api/getuser', {
@@ -27,20 +28,26 @@ const Header = (props: {
       const data = await response.json();
       localStorage.setItem('user' , JSON.stringify(data.user))  ;
       console.log(localStorage.getItem('token'))
-      console.log(localStorage.getItem('user'))
+       setUser(data.user)
+       console.log(data.user) ;
     } catch (error) {
       console.error('There has been a problem with your fetch operation:', error);
     }
   }
 
-   getUser() ;
-   const user  = JSON.parse(localStorage.getItem('user')!)
+   
+  useEffect(()=>{
+    getUser() ;
+  } , []) ;
+
+   
 
   
 
 
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
+
       <div className="flex flex-grow items-center justify-end py-4 px-4 shadow-2 md:px-6 2xl:px-11">
         <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
           {/* <!-- Hamburger Toggle BTN --> */}
@@ -143,7 +150,7 @@ const Header = (props: {
           </ul>
 
           {/* <!-- User Area --> */}
-          <DropdownUser  />
+          <DropdownUser user={user!}  />
           {/* <!-- User Area --> */}
         </div>
       </div>

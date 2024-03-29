@@ -2,145 +2,39 @@ import ProductOne from '../images/user/nanche.png';
 import ProductTwo from '../images/user/jane.png';
 import ProductThree from '../images/user/josiane.png';
 import ProductFour from '../images/user/user-04.png';
+import { useState , useEffect } from 'react';
 
 const TableTwo = () => {
-  const employes = [
-    {
-      "id": 1,
-      "name": "Mbappe",
-      "prenom": "Jean Claude",
-      "matricule": "DU14",
-      "phone": "658 55 76 25",
-      "mail": "jeanclaude.mbappe@gmail.com",
-      "fonction": "enseignant"
-    },
-    {
-      "id": 2,
-      "name": "Nkono",
-      "prenom": "Élise",
-      "matricule": "DU15",
-      "phone": "657 44 73 22",
-      "mail": "elise.nkono@gmail.com",
-      "fonction": "administration"
-    },
-    {
-      "id": 3,
-      "name": "Essomba",
-      "prenom": "Marc",
-      "matricule": "DU16",
-      "phone": "659 33 82 19",
-      "mail": "marc.essomba@gmail.com",
-      "fonction": "enseignant"
-    },
-    {
-      "id": 4,
-      "name": "Fotso",
-      "prenom": "Valerie",
-      "matricule": "DU17",
-      "phone": "654 22 91 18",
-      "mail": "valerie.fotso@gmail.com",
-      "fonction": "administration"
-    },
-    {
-      "id": 5,
-      "name": "Eto'o",
-      "prenom": "Samuel",
-      "matricule": "DU18",
-      "phone": "653 11 90 17",
-      "mail": "samuel.etoo@gmail.com",
-      "fonction": "enseignant"
-    },
-    {
-      "id": 6,
-      "name": "Kamto",
-      "prenom": "Boris",
-      "matricule": "DU19",
-      "phone": "652 10 89 16",
-      "mail": "boris.kamto@gmail.com",
-      "fonction": "administration"
-    },
-    {
-      "id": 7,
-      "name": "Biya",
-      "prenom": "Pauline",
-      "matricule": "DU20",
-      "phone": "651 09 88 15",
-      "mail": "pauline.biya@gmail.com",
-      "fonction": "enseignant"
-    },
-    {
-      "id": 8,
-      "name": "Djongoue",
-      "prenom": "Pierre",
-      "matricule": "DU21",
-      "phone": "650 08 87 14",
-      "mail": "pierre.djongoue@gmail.com",
-      "fonction": "administration"
-    },
-    {
-      "id": 9,
-      "name": "Mbah",
-      "prenom": "Acha",
-      "matricule": "DU22",
-      "phone": "649 07 86 13",
-      "mail": "acha.mbah@gmail.com",
-      "fonction": "enseignant"
-    },
-    {
-      "id": 10,
-      "name": "Tchami",
-      "prenom": "Hervé",
-      "matricule": "DU23",
-      "phone": "648 06 85 12",
-      "mail": "herve.tchami@gmail.com",
-      "fonction": "administration"
-    },
-    {
-      "id": 11,
-      "name": "Kouam",
-      "prenom": "Lucien",
-      "matricule": "DU24",
-      "phone": "654 32 16 58",
-      "mail": "lucien.kouam@gmail.com",
-      "fonction": "enseignant"
-    },
-    {
-      "id": 12,
-      "name": "Djemba",
-      "prenom": "Claudine",
-      "matricule": "DU25",
-      "phone": "653 94 26 58",
-      "mail": "claudine.djemba@gmail.com",
-      "fonction": "administration"
-    },
-    {
-      "id": 13,
-      "name": "Etoundi",
-      "prenom": "Olivier",
-      "matricule": "DU26",
-      "phone": "652 58 96 34",
-      "mail": "olivier.etoundi@gmail.com",
-      "fonction": "enseignant"
-    },
-    {
-      "id": 14,
-      "name": "Ngassa",
-      "prenom": "Fabrice",
-      "matricule": "DU27",
-      "phone": "651 78 54 69",
-      "mail": "fabrice.ngassa@gmail.com",
-      "fonction": "administration"
-    },
-    {
-      "id": 15,
-      "name": "Ekotto",
-      "prenom": "Benjamin",
-      "matricule": "DU28",
-      "phone": "650 32 14 56",
-      "mail": "benjamin.ekotto@gmail.com",
-      "fonction": "enseignant"
+
+  const [users , setUsers]:any = useState(null) ;
+  async function getUsers(){
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/user', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+       setUsers(data.users)
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
     }
-  ];
+  }
+
+   
+  useEffect(()=>{
+    getUsers() ;
+  } , []) ;
+
+
+ 
+
 
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -170,8 +64,8 @@ const TableTwo = () => {
           <p className="font-medium ">action</p>
         </div>
       </div>
-
-      {employes.map((employe) => {
+      {!users && <div className='text-center text-xl  mb-4'>chargement des donnnées ...</div>}
+      {users && users.map((employe) => {
         return (
           <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
             <div className="col-span-2 flex items-center">
@@ -179,20 +73,20 @@ const TableTwo = () => {
                 {/* <div className="h-12.5 w-15 rounded-md">
                 <img src={ProductFour} alt="Product" className='block min-h-full min-w-full '/>
               </div> */}
-                <p className="text-sm text-black dark:text-white">{employe.name + " "+employe.prenom}</p>
+                <p className="text-sm text-black dark:text-white">{employe.name }</p>
               </div>
             </div>
             <div className="col-span-1 hidden items-center justify-center sm:flex">
               <p className="text-sm text-black dark:text-white ">{employe.matricule}</p>
             </div>
             <div className="col-span-1 flex items-center justify-center">
-              <p className="text-sm text-black dark:text-white">{employe.fonction}</p>
+              <p className="text-sm text-black dark:text-white">{employe.fontion}</p>
             </div>
             <div className="col-span-1 flex items-center justify-center">
               <p className="text-sm text-black dark:text-white">{employe.phone}</p>
             </div>
             <div className="col-span-2 flex items-center justify-center">
-              <p className="text-sm text-meta-3">{employe.mail}</p>
+              <p className="text-sm text-meta-3">{employe.email}</p>
             </div>
             <div className="col-span-1 flex items-center justify-center">
               <div className="flex items-center space-x-3.5">

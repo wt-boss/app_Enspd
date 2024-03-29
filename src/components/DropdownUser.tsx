@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import UserOne from '../images/user/user.png';
 
-const DropdownUser = () => {
+const DropdownUser: React.FC<any>  = ({user}) => {
 
-  const user  = JSON.parse(localStorage.getItem('user')!)
 
   const navigate = useNavigate() ;
   const logout = (e) => {
@@ -54,9 +53,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            {user.name && user.name}
+            {user && user.name}
           </span>
-          <span className="block text-xs">{user.function && user.function}</span>
+          <span className="block text-xs">{user && user.fontion}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full overflow-hidden flex justify-center items-center">
