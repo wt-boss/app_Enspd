@@ -1,0 +1,162 @@
+import React from 'react'
+import {useState} from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
+import Breadcrumb from '../../components/Breadcrumb';
+export default function Presence() {
+    const navigate = useNavigate() ;
+    const [presence , setPresence]:any = useState({
+        matricule:"" ,
+        date:"" ,
+        heures:0
+    })
+    const handleChangeInput = (e) => {
+        e.preventDefault();
+        const { name, value } = e.target;
+        setPresence((prevState) => ({ ...prevState, [name]: value }));
+      };
+    
+      const CreatePresence = async (event, matricule, date, heures) => {
+        event.preventDefault();
+    
+        try {
+          const response = await fetch('http://127.0.0.1:8000/api/presence', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({
+              matricule,
+              date,
+              heures,
+            }),
+          });
+    
+          if (!response.ok) {
+            alert("echec de l'ajout de la presence");
+    
+            throw new Error("Échec de l'ajout");
+          }
+    
+          console.log('ok');
+          alert("Presence Ajoutée") ;
+          navigate('/add/presence');
+          setPresence({ matricule: '',
+          date: '',
+          heures: '',
+        
+        })
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+    return (
+        <>
+          <div className="mx-auto">
+            <Breadcrumb pageName="Ajouter une Presence" />
+    
+            <div className="grid grid-cols-5 gap-8">
+              <div className="col-span-5 xl:col-span-5">
+                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                  <div className="border-b border-stroke py-4 px-7 dark:border-strokedark">
+                    <h3 className="font-medium text-black dark:text-white">
+                      Ajouter une prensence
+                    </h3>
+                  </div>
+                  <div className="p-7">
+                    <form
+                      onSubmit={(e) =>
+                        CreatePresence(
+                          e,
+                          presence.matricule,
+                          presence.date,
+                          presence.heures,
+                        )
+                      }
+
+                      onReset={()=>
+                        setPresence({
+                            matricule:"" ,
+                            date:"" ,
+                            heures:0
+                        })
+                      }
+    
+                      
+                    >
+                      <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                        <div className="w-full sm:w-1/2">
+                          <label
+                            className="mb-3 block text-sm font-medium text-black dark:text-white"
+                            htmlFor="year"
+                          >
+                            Matricule
+                          </label>
+    
+                          <input
+                            className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            type="text"
+                            name="matricule"
+                            onChange={(e) => handleChangeInput(e)}
+                            value={presence.matricule}
+                            placeholder="Entrer le matricule de l'emplyé "
+                          />
+                        </div>
+                      
+    
+                        <div className="w-full sm:w-1/3">
+                          <label
+                            className="mb-3 block text-sm font-medium text-black dark:text-white"
+                            htmlFor="street"
+                          >
+                            Date de la presence
+                          </label>
+                          <input
+                            type="date"
+                            name="date"
+                            onChange={(e) => handleChangeInput(e)}
+                            value={presence.date}
+                            className="custom-input-date custom-input-date-1 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                          />
+                        </div>
+                        <div className="w-full sm:w-1/3">
+                          <label
+                            className="mb-3 block text-sm font-medium text-black dark:text-white"
+                            htmlFor="street"
+                          >
+                            Nombre d'heures
+                          </label>
+                          <input
+                            type="number"
+                            name="heures"
+                            onChange={(e) => handleChangeInput(e)}
+                            value={presence.heures}
+                            className="custom-input-date custom-input-date-1 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                          />
+                        </div>
+                      </div>
+    
+                      <div className="flex justify-end gap-4.5">
+                        <button
+                          className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+                          type="reset"
+                        >
+                          Annuler
+                        </button>
+                        <button
+                          className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:shadow-1"
+                          type="submit"
+                        >
+                          Ajouter
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+}

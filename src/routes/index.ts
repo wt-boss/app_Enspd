@@ -14,6 +14,8 @@ const Ressource = lazy(() => import('../pages/AddElements/Sanction'));
 const TableRessources= lazy(() => import('../pages/ListingSanction'));
 const ListingPresence = lazy(() => import('../pages/ListingPresence'));
 const ListingConges =lazy(()=>import('../pages/ListingConges'))
+const Presence =lazy(()=> import ('../pages/AddElements/Presence'))
+const Conge =lazy(()=> import ('../pages/AddElements/Conge'))
 
 const coreRoutes = [
   {
@@ -22,14 +24,29 @@ const coreRoutes = [
     component: Listusers,
   },
   {
-    path: '/AddElements/user',
+    path: '/add/user',
     title: 'Add User',
     component: user,
   },
   {
-    path: '/AddElements/ReserverRessource',
-    title: 'Add ReserverRessource',
-    component: ReserverRessource,
+    path: '/add/presence',
+    title: 'Add Presence',
+    component: Presence,
+  },
+  {
+    path: '/add/conge',
+    title: 'Add Conge',
+    component: Conge,
+  },
+  {
+    path: '/add/user',
+    title: 'Add User',
+    component: user,
+  },
+  {
+    path: '/add/sanction',
+    title: 'Ajouter une sanction',
+    component: Ressource,
   },
   {
     path: '/pages/EditElements/pension',
@@ -47,8 +64,8 @@ const coreRoutes = [
     component: editUser,
   },
   {
-    path: '/AddElements/Ressource',
-    title: 'Add Ressource',
+    path: '/add/sanction',
+    title: 'Add sanction',
     component: Ressource,
   },
   {

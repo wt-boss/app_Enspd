@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Logo from '../images/logo/logo.jpg';
 import SidebarLinkGroup from './SidebarLinkGroup';
 
@@ -19,6 +20,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
   );
+const navigate = useNavigate() ;
+  const logout = (e) => {
+    e.preventDefault() ;
+    localStorage.removeItem('token');
+    navigate("/auth/signin");
+  };
 
   // close on click outside
   useEffect(() => {
@@ -498,7 +505,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           </li> */}
                           <li>
                             <NavLink
-                              to="/AddElements/user"
+                              to="/add/user"
                               className={({ isActive }) =>
                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
                                 (isActive && '!text-white')
@@ -507,15 +514,40 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Utilisateurs
                             </NavLink>
                           </li>
+                          
                           <li>
                             <NavLink
-                              to="/AddElements/Ressource"
+                              to="/add/sanction"
                               className={({ isActive }) =>
                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
                                 (isActive && '!text-white')
                               }
                             >
                               Sanction
+                            </NavLink>
+                          </li>
+
+                          <li>
+                            <NavLink
+                              to="/add/conge"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                (isActive && '!text-white')
+                              }
+                            >
+                              Congé
+                            </NavLink>
+                          </li>
+
+                          <li>
+                            <NavLink
+                              to="/add/presence"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                (isActive && '!text-white')
+                              }
+                            >
+                              Presence
                             </NavLink>
                           </li>
                           
@@ -606,14 +638,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       >
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
+                           
                             <NavLink
-                              to="/auth/signin"
+                            onClick={(e)=>{logout}}
+                              to="#"
                               className={({ isActive }) =>
                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
                                 (isActive && '!text-white')
                               }
                             >
-                             Connexion
+                             Deconnexion
                             </NavLink>
                           </li>
                           <li>

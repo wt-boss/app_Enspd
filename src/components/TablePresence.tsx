@@ -1,98 +1,36 @@
-const TablePresence = () => {
+import { useState , useEffect } from 'react';
 
-    const presences = [
-        {
-          id: 1,
-          user: "Doumbe Jack",
-          fonction: "enseignant",
-          heures: 100,
-          presence: 90,
-          abscence: 10,
-          ratio: 80
+const TablePresence = () => {
+  const [presences , setPresence]:any = useState(null) ;
+  async function getPresences(){
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/presence', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        {
-          id: 2,
-          user: "Mbappe Jean Claude",
-          fonction: "enseignant",
-          heures: 100,
-          presence: 90,
-          abscence: 10,
-          ratio: 80
-        },
-        {
-          id: 3,
-          user: "Nkono Élise",
-          fonction: "administration",
-          heures: 100,
-          presence: 90,
-          abscence: 10,
-          ratio: 80
-        },
-        {
-          id: 4,
-          user: "Essomba Marc",
-          fonction: "enseignant",
-          heures: 100,
-          presence: 90,
-          abscence: 10,
-          ratio: 80
-        },
-        {
-          id: 5,
-          user: "Fotso Valerie",
-          fonction: "administration",
-          heures: 100,
-          presence: 90,
-          abscence: 10,
-          ratio: 80
-        },
-        {
-          id: 6,
-          user: "Eto'o Samuel",
-          fonction: "enseignant",
-          heures: 100,
-          presence: 90,
-          abscence: 10,
-          ratio: 80
-        },
-        {
-          id: 7,
-          user: "Takam Serge",
-          fonction: "administration",
-          heures: 100,
-          presence: 90,
-          abscence: 10,
-          ratio: 80
-        },
-        {
-          id: 8,
-          user: "Ngono Alice",
-          fonction: "enseignant",
-          heures: 100,
-          presence: 90,
-          abscence: 10,
-          ratio: 80
-        },
-        {
-          id: 9,
-          user: "Essomba Thomas",
-          fonction: "administration",
-          heures: 100,
-          presence: 90,
-          abscence: 10,
-          ratio: 80
-        },
-        {
-          id: 10,
-          user: "Fouda Brenda",
-          fonction: "enseignant",
-          heures: 100,
-          presence: 90,
-          abscence: 10,
-          ratio: 80
-        }
-      ]
-      
+        
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+       setPresence(data.presences)
+       console.log(presences)
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
+    }
+  }
+
+
+   
+  useEffect(()=>{
+    getPresences() ;
+  } , []) ;
+
+
+    
     return (
       <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <div className="max-w-full overflow-x-auto">
@@ -103,79 +41,67 @@ const TablePresence = () => {
                   ID 
                 </th>
                 <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                Date 
+                </th>
+                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                Matricule 
+                </th>
+                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 Nom 
                 </th>
                 <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 Fonction
                 </th>
                 <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
-                  Nombre d'heure
+                  Nombre d'heures
                 </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
-                 presences
-                </th>
-                
-                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
-                  Abscence
-                </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
-                  % Presence
-                </th>
+               
                 <th className="py-4 px-4 font-medium text-black dark:text-white">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody>
-  
-              {
+              {!presences && <div className='text-center text-xl  mb-4'>chargement des donnnées ...</div> }
+              {presences &&
                 presences.map((presence)=>{
                   return  <tr>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <h5 className="font-medium text-black dark:text-white">
-                        {presence.id}
+                        {presence.presence.id}
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <h5 className="font-medium text-black dark:text-white">
-                       {presence.user}
+                        {presence.presence.date}
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <h5 className="font-medium text-black dark:text-white">
-                       {presence.fonction} 
+                       {presence.user.matricule}
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <h5 className="font-medium text-black dark:text-white">
-                        {presence.heures}
+                       {presence.user.name} 
+                      </h5>
+                    </td>
+                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                      <h5 className="font-medium text-black dark:text-white">
+                       {presence.user.fontion} 
+                      </h5>
+                    </td>
+                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                      <h5 className="font-medium text-black dark:text-white">
+                        {presence.presence.heures}
                       </h5>
                       
                     </td>
-                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                      <h5 className="font-medium text-black dark:text-white">
-                       {presence.presence}
-                      </h5>
-                      
-                    </td>
+                    
                   
                  
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      {
-                        (presence.status==1)?<p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
-                        Teminée </p>:<p className="inline-flex rounded-full bg-warning bg-opacity-10 py-1 px-3 text-sm font-medium text-warning">
-                         {presence.abscence} 
-                      </p>
-                      }
-                      
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                      <h5 className="font-medium text-black dark:text-white">
-                       {presence.abscence
-                       }
-                      </h5>
-                      
-                    </td>
+                    
+                    
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <div className="flex items-center space-x-3.5">
                       <button className="hover:text-primary">

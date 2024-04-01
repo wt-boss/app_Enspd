@@ -1,97 +1,41 @@
+import { useState , useEffect } from 'react';
+
+
 const TableThree = () => {
 
-  const sanctions = [
-      {
-        id: 1,
-        user: "Doumbe Jack",
-        fonction: "enseignant",
-        type: "disciplinaire",
-        motif: "retard répété",
-        status: 0,
-        date: "20/01/2023"
-      },
-      {
-        id: 2,
-        user: "Mbappe Jean Claude",
-        fonction: "enseignant",
-        type: "disciplinaire",
-        motif: "absence non justifiée",
-        status: 0,
-        date: "22/02/2023"
-      },
-      {
-        id: 3,
-        user: "Nkono Élise",
-        fonction: "administration",
-        type: "avertissement",
-        motif: "négligence dans les tâches",
-        status: 1,
-        date: "25/02/2023"
-      },
-      {
-        id: 4,
-        user: "Essomba Marc",
-        fonction: "enseignant",
-        type: "disciplinaire",
-        motif: "manquement au code vestimentaire",
-        status: 0,
-        date: "01/03/2023"
-      },
-      {
-        id: 5,
-        user: "Fotso Valerie",
-        fonction: "administration",
-        type: "avertissement",
-        motif: "retard dans la livraison des rapports",
-        status: 1,
-        date: "10/03/2023"
-      },
-      {
-        id: 6,
-        user: "Eto'o Samuel",
-        fonction: "enseignant",
-        type: "disciplinaire",
-        motif: "utilisation inappropriée des ressources",
-        status: 0,
-        date: "15/03/2023"
-      },
-      {
-        id: 7,
-        user: "Takam Serge",
-        fonction: "administration",
-        type: "avertissement",
-        motif: "communication inappropriée avec les clients",
-        status: 1,
-        date: "20/03/2023"
-      },
-      {
-        id: 8,
-        user: "Ngono Alice",
-        fonction: "enseignant",
-        type: "disciplinaire",
-        motif: "non-respect des horaires de cours",
-        status: 0,
-        date: "25/03/2023"
-      },
-      {
-        id: 9,
-        user: "Essomba Thomas",
-        fonction: "administration",
-        type: "avertissement",
-        motif: "manque de respect envers les collègues",
-        status: 1,
-        date: "30/03/2023"
-      },
-      {
-        id: 10,
-        user: "Fouda Brenda",
-        fonction: "enseignant",
-        type: "disciplinaire",
-        motif: "fraude académique",
-        status: 0,
-        date: "04/04/2023"
+  const [sanctions , setSanction]:any = useState(null) ;
+  async function getSanctions(){
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/sanction', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    ]
+      const data = await response.json();
+       setSanction(data.sanctions)
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
+    }
+  }
+
+  console.log(sanctions) ;
+
+   
+  useEffect(()=>{
+    getSanctions() ;
+  } , []) ;
+
+
+
+
+ 
+    
     
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -103,11 +47,15 @@ const TableThree = () => {
                 ID Sanction
               </th>
               <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-              Nom du sanctionné
+              Matricule
               </th>
               <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-              Fonction
+              Nom
               </th>
+              <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+              Function
+              </th>
+            
               <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
                 Type
               </th>
@@ -116,10 +64,10 @@ const TableThree = () => {
               </th>
               
               <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
-                Status
+                Date
               </th>
               <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
-                Date
+                Status
               </th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">
                 Actions
@@ -127,34 +75,46 @@ const TableThree = () => {
             </tr>
           </thead>
           <tbody>
+          {!sanctions && <div className='text-center text-xl  mb-4'>chargement des donnnées ...</div>}
 
-            {
+            { sanctions &&
               sanctions.map((sanction)=>{
                 return  <tr>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
-                      {sanction.id}
+                      {sanction.sanction.id}
                     </h5>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
-                     {sanction.user}
+                     {sanction.user.matricule}
                     </h5>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
-                     {sanction.fonction} 
+                     {sanction.user.name} 
                     </h5>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
-                      {sanction.type}
+                     {sanction.user.fontion} 
+                    </h5>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                      {sanction.sanction.type}
                     </h5>
                     
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
-                     {sanction.motif}
+                     {sanction.sanction.motif}
+                    </h5>
+                    
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                     {sanction.sanction.date}
                     </h5>
                     
                   </td>
@@ -162,7 +122,7 @@ const TableThree = () => {
                
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     {
-                      (sanction.status==1)?<p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
+                      (sanction.sanction.status==1)?<p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
                       Teminée </p>:<p className="inline-flex rounded-full bg-warning bg-opacity-10 py-1 px-3 text-sm font-medium text-warning">
                        Encours 
                     </p>

@@ -1,87 +1,35 @@
-const TableConges = () => {
+import { useState , useEffect } from 'react';
 
-    const conges = [
-        {
-          id: 1,
-          user: "Doumbe Jack",
-          fonction: "enseignant",
-          type: "classique",
-          status: 0,
-          periode: "20/01/2023 au 23/03/24"
+const TableConges = () => {
+  const [conges , setConge]:any = useState(null) ;
+  async function getConges(){
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/conge', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        {
-          id: 2,
-          user: "Mbappe Jean Claude",
-          fonction: "enseignant",
-          type: "classique",
-          status: 1,
-          periode: "20/01/2023 au 23/03/24"
-        },
-        {
-          id: 3,
-          user: "Nkono Élise",
-          fonction: "administration",
-          type: "maternité",
-          status: 1,
-          periode: "20/01/2023 au 23/03/24"
-        },
-        {
-          id: 4,
-          user: "Essomba Marc",
-          fonction: "enseignant",
-          type: "classique",
-          status: 0,
-          periode: "20/01/2023 au 23/03/24"
-        },
-        {
-          id: 5,
-          user: "Fotso Valerie",
-          fonction: "administration",
-          type: "classique",
-          status: 0,
-          periode: "20/01/2023 au 23/03/24"
-        },
-        {
-          id: 6,
-          user: "Eto'o Samuel",
-          fonction: "enseignant",
-          type: "classique",
-          status: 1,
-          periode: "20/01/2023 au 23/03/24"
-        },
-        {
-          id: 7,
-          user: "Takam Serge",
-          fonction: "administration",
-          type: "classique",
-          status: 0,
-          periode: "20/01/2023 au 23/03/24"
-        },
-        {
-          id: 8,
-          user: "Ngono Alice",
-          fonction: "enseignant",
-          type: "martenité",
-          status: 1,
-          periode: "20/01/2023 au 23/03/24"
-        },
-        {
-          id: 9,
-          user: "Essomba Thomas",
-          fonction: "administration",
-          type: "classique",
-          status: 0,
-          periode: "20/01/2023 au 23/03/24"
-        },
-        {
-          id: 10,
-          user: "Fouda Brenda",
-          fonction: "enseignant",
-          type: "martenité",
-          status: 1,
-          periode: "20/01/2023 au 23/03/24"
-        }
-      ]
+        
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+       setConge(data.conges)
+       console.log(conges)
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
+    }
+  }
+
+
+   
+  useEffect(()=>{
+    getConges() ;
+  } , []) ;
+
+    
       
     return (
       <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -93,72 +41,81 @@ const TableConges = () => {
                   ID Congés
                 </th>
                 <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                Matricule 
+                </th>
+                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 Nom 
                 </th>
                 <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 Fonction
                 </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white text-center">
-                  Type
+                
+                
+                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white text-center ">
+                  Debut
                 </th>
-                
-                
+                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white text-center ">
+                  Fin
+                </th>
                 <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white ">
                   Status
                 </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white text-center ">
-                  periode
-                </th>
+                
                 <th className="py-4 px-4 font-medium text-black dark:text-white">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody>
-  
-              {
+          {!conges && <div className='text-center text-xl  mb-4'>chargement des donnnées ...</div> }
+              {conges &&
                 conges.map((conge)=>{
                   return  <tr>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <h5 className="font-medium text-black dark:text-white">
-                        {conge.id}
+                        {conge.conge.id}
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <h5 className="font-medium text-black dark:text-white">
-                       {conge.user}
+                       {conge.user.matricule}
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <h5 className="font-medium text-black dark:text-white">
-                       {conge.fonction} 
+                       {conge.user.name}
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <h5 className="font-medium text-black dark:text-white">
-                        {conge.type}
+                       {conge.user.fontion}
                       </h5>
-                      
                     </td>
+                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                      <h5 className="font-medium text-black dark:text-white">
+                       {conge.conge.debut}
+                      </h5>
+                    </td>
+                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                      <h5 className="font-medium text-black dark:text-white">
+                       {conge.conge.fin}
+                      </h5>
+                    </td>
+                  
+                  
                  
                   
                  
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       {
-                        (conge.status==1)?<p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
+                        (!conges)?<p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
                         Teminée </p>:<p className="inline-flex rounded-full bg-warning bg-opacity-10 py-1 px-3 text-sm font-medium text-warning">
                          Encours 
                       </p>
                       }
                       
                     </td>
-                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                      <h5 className="font-medium text-black dark:text-white">
-                       {conge.periode
-                       }
-                      </h5>
-                      
-                    </td>
+                   
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <div className="flex items-center space-x-3.5">
                       <button className="hover:text-primary">
